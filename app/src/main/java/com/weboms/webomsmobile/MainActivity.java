@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText etUname, etPass;
 
+    Intent Callthis;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private void postDataUsingVolley(final String username, final String password) {
 
         // url to post our data
-        String url = "http://192.168.1.4/php/Web-based-ordering-management-system/mobile/login.php";
-//        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/login.php";
+//        String url = "http://192.168.1.4/php/Web-based-ordering-management-system/mobile/login.php";
+        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/login.php";
         // loading pogress bar this is optional
         loadingPB.setVisibility(View.VISIBLE);
 
@@ -66,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject respObj = new JSONObject(response);
                     String result = respObj.getString("result");
                     Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                    if (result.equals("valid")){
+                        Callthis = new Intent(".Dashboard");
+                        startActivity(Callthis);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
