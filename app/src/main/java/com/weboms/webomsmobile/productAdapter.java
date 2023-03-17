@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class productAdapter extends BaseAdapter {
@@ -69,9 +71,7 @@ public class productAdapter extends BaseAdapter {
         Product product = productList.get(position);
         holder.nameText.setText(product.getName());
         holder.priceText.setText(product.getPrice());
-//        byte[] productImage = product.getImage();
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(productImage, 0, productImage.length);
-//        holder.imageView.setImageBitmap(bitmap);
+        Glide.with(context.getApplicationContext()).load(product.getImage()).into(holder.imageView);
         return row;
     }
 }

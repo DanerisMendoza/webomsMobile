@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -33,8 +35,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.ByteBuffer;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,15 +140,10 @@ public class ProductList extends Activity {
                     String[] dishesArr2 = dishesArr.split(",");
                     String[] priceArr2 = priceArr.split(",");
                     String[] picNameArr2 = picNameArr.split(",");
-
-
-                    Toast.makeText(ProductList.this, picNameArr2[0], Toast.LENGTH_SHORT).show();
-
                     for(int i=0; i<dishesArr2.length; i++){
                         String picName = picNameArr2[i];
                         String picUrl = "http://192.168.1.3/php/Web-based-ordering-management-system/dishesPic/"+picName;
-
-                        list.add(new Product(i , dishesArr2[i], "₱"+priceArr2[i], null));
+                        list.add(new Product(i , dishesArr2[i], "₱"+priceArr2[i], picUrl));
                     }
                     adapter1.notifyDataSetChanged();
                     Toast.makeText(ProductList.this, dishesArr2[0], Toast.LENGTH_SHORT).show();
@@ -170,25 +170,8 @@ public class ProductList extends Activity {
 
     }
 
-    private byte[] downloadUrl(URL toDownload) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        try {
-            byte[] chunk = new byte[4096];
-            int bytesRead;
-            InputStream stream = toDownload.openStream();
 
-            while ((bytesRead = stream.read(chunk)) > 0) {
-                outputStream.write(chunk, 0, bytesRead);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return outputStream.toByteArray();
-    }
 
 
     public void init() {
