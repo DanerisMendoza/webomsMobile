@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -12,6 +13,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
@@ -20,9 +23,10 @@ import org.json.JSONObject;
 
 public class Dashboard extends Activity {
 
-    Button buttonlogout;
+    Button buttonlogout,buttonViewMenu;
     Intent Callthis;
     TextView textViewName, textViewBalance, textViewUserName, textViewGender,  textViewAddress, textViewEmail;
+    ImageView imgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +42,21 @@ public class Dashboard extends Activity {
                 startActivity(Callthis);
             }
         });
+        buttonViewMenu.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                finish();
+                Callthis = new Intent(".ProductList");
+                startActivity(Callthis);
+            }
+        });
+
     }
 
     public void init(){
         String user_id = getIntent().getStringExtra("user_id");
         postDataUsingVolley(user_id);
+        imgView = findViewById(R.id.imgView);
         textViewName = findViewById(R.id.textViewName);
         textViewUserName = findViewById(R.id.textViewUserName);
         textViewGender = findViewById(R.id.textViewGender);
@@ -50,11 +64,12 @@ public class Dashboard extends Activity {
         textViewEmail = findViewById(R.id.textViewEmail);
         textViewBalance = findViewById(R.id.textViewBalance);
         buttonlogout = findViewById(R.id.buttonlogout);
+        buttonViewMenu = findViewById(R.id.buttonViewMenu);
     }
 
     private void postDataUsingVolley(final String user_id) {
-//        String url = "http://192.168.1.5/php/Web-based-ordering-management-system/mobile/getUserInfo.php";
-        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/getUserInfo.php";
+        String url = "http://192.168.1.3/php/Web-based-ordering-management-system/mobile/getUserInfo.php";
+//        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/getUserInfo.php";
         RequestQueue queue = Volley.newRequestQueue(Dashboard.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
@@ -68,7 +83,9 @@ public class Dashboard extends Activity {
                     textViewAddress.setText( respObj.getString("address"));
                     textViewEmail.setText( respObj.getString("email"));
                     textViewBalance.setText("₱"+ respObj.getString("balance"));
-
+                    String picName = respObj.getString("picName");
+                    String picUrl = "http://ucc-csd-bscs.com/WEBOMS/profilePic/"+picName;
+                    Glide.with(getApplicationContext()).load(picUrl).into(imgView);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

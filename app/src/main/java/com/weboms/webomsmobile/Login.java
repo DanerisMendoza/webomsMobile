@@ -45,8 +45,8 @@ public class Login extends AppCompatActivity {
     }
 
     private void postDataUsingVolley(final String username, final String password) {
-//        String url = "http://192.168.1.5/php/Web-based-ordering-management-system/mobile/login.php";
-        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/login.php";
+        String url = "http://192.168.1.3/php/Web-based-ordering-management-system/mobile/login.php";
+//        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/login.php";
 
         loadingPB.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(Login.this);
