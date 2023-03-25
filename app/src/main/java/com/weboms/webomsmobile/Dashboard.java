@@ -27,6 +27,7 @@ public class Dashboard extends Activity {
     Intent Callthis;
     TextView textViewName, textViewBalance, textViewUserName, textViewGender,  textViewAddress, textViewEmail;
     ImageView imgView;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class Dashboard extends Activity {
             public void onClick(View v) {
                 finish();
                 Callthis = new Intent(".ProductList");
+                Callthis.putExtra("user_id", user_id);
                 startActivity(Callthis);
             }
         });
@@ -54,7 +56,7 @@ public class Dashboard extends Activity {
     }
 
     public void init(){
-        String user_id = getIntent().getStringExtra("user_id");
+        user_id = getIntent().getStringExtra("user_id");
         postDataUsingVolley(user_id);
         imgView = findViewById(R.id.imgView);
         textViewName = findViewById(R.id.textViewName);
@@ -68,8 +70,7 @@ public class Dashboard extends Activity {
     }
 
     private void postDataUsingVolley(final String user_id) {
-        String url = "http://192.168.1.3/php/Web-based-ordering-management-system/mobile/getUserInfo.php";
-//        String url = "http://ucc-csd-bscs.com/WEBOMS/mobile/getUserInfo.php";
+        String url = GlobalVariables.url+"/mobile/getUserInfo.php";
         RequestQueue queue = Volley.newRequestQueue(Dashboard.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
@@ -84,8 +85,11 @@ public class Dashboard extends Activity {
                     textViewEmail.setText( respObj.getString("email"));
                     textViewBalance.setText("₱"+ respObj.getString("balance"));
                     String picName = respObj.getString("picName");
-                    String picUrl = "http://ucc-csd-bscs.com/WEBOMS/profilePic/"+picName;
-                    Glide.with(getApplicationContext()).load(picUrl).into(imgView);
+                    if ((picName != null)) {
+                        String picUrl = GlobalVariables.url+"/profilePic/"+picName;
+                        Glide.with(getApplicationContext()).load(picUrl).into(imgView);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

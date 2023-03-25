@@ -48,7 +48,7 @@ public class productAdapter extends BaseAdapter {
 
     private class ViewHolder{
         ImageView imageView;
-        TextView nameText,priceText;
+        TextView nameText,priceText,stockText;
     }
 
 
@@ -62,6 +62,7 @@ public class productAdapter extends BaseAdapter {
             row = inflater.inflate(layout, null);
             holder.nameText = (TextView) row.findViewById(R.id.nameText);
             holder.priceText = (TextView) row.findViewById(R.id.priceText);
+            holder.stockText = (TextView) row.findViewById(R.id.stockText);
             holder.imageView = (ImageView) row.findViewById(R.id.imgProduct);
             row.setTag(holder);
         }
@@ -71,6 +72,7 @@ public class productAdapter extends BaseAdapter {
         Product product = productList.get(position);
         holder.nameText.setText(product.getName());
         holder.priceText.setText(product.getPrice());
+        holder.stockText.setText(product.getStock());
         Glide.with(context.getApplicationContext()).load(product.getImage()).into(holder.imageView);
         return row;
     }

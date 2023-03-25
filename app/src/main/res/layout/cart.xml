@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:id="@+id/gridView"
         android:layout_gravity="center"
-        android:numColumns="auto_fit"
+        android:numColumns="1"
         android:background="@android:color/holo_purple">
     </GridView>
 
@@ -25,32 +25,32 @@
         android:layout_weight="1">
         <Button
             android:layout_weight="1"
-            android:id="@+id/btnHome"
+            android:id="@+id/btnClear"
             style="android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Home\n"
+            android:text="Clear\n"
             android:textSize="18sp" />
 
-            <Button
+        <Button
             android:layout_weight="1"
-            android:id="@+id/btnViewCart"
+            android:id="@+id/buttonViewMenu"
             style="android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="View Cart"
+            android:text="Menu \n"
             android:textSize="18sp" />
 
-            <Button
+        <Button
             android:layout_weight="1"
-            android:id="@+id/btnAddToCart"
+            android:id="@+id/btnCheckout"
             style="android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="add to cart"
+            android:text="Check Out"
             android:textSize="18sp" />
 
     </LinearLayout>

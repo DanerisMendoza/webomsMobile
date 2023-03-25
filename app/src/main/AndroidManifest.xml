@@ -53,6 +53,16 @@
             </intent-filter>
         </activity>
 
+        <!--Cart-->
+        <activity
+            android:name=".Cart"
+            android:exported="true">
+            <intent-filter>
+                <action android:name=".Cart" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
