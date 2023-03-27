@@ -3,15 +3,17 @@ package com.weboms.webomsmobile;
 public class Product {
     private int id;
     private String name;
-    private String price;
+    private Float price;
     private String image;
-    private  String stock;
+    private  int stock;
+    private  int orderType;
 
-    public Product(int id, String name, String price,String stock, String image) {
+    public Product(int id, String name, Float price,Integer stock, Integer orderType, String image) {
         super();
         this.id = id;
         this.name = name;
         this.price = price;
+        this.orderType = orderType;
         this.stock = stock;
         this.image = image;
     }
@@ -24,7 +26,7 @@ public class Product {
         return name;
     }
 
-    public String getPrice() {
+    public Float getPrice() {
         return price;
     }
 
@@ -32,8 +34,12 @@ public class Product {
         return image;
     }
 
-    public String getStock() {
+    public int getStock() {
         return stock;
+    }
+
+    public int getOrderType() {
+        return orderType;
     }
 
     public void setId(int id) {
@@ -44,7 +50,7 @@ public class Product {
         this.name = name;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
@@ -52,7 +58,11 @@ public class Product {
         this.image = image;
     }
 
-    public void setStock(String stock) {
+    public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public void setOrderType(int orderType) {
+        this.orderType = orderType;
     }
 }

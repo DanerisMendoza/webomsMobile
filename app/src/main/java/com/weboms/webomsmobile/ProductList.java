@@ -50,9 +50,11 @@ public class ProductList extends Activity {
     productAdapter adapter1 = null;
 
     GridView gridView,gridViewOrderList;
-    ArrayList<Product> list = new ArrayList<Product>();
+    ArrayList<Product> menuList = new ArrayList<Product>();
+
 
     List<Map<String,String>> orderList = new ArrayList<Map<String,String>>();
+
     String cursorGlobal = "";
     Button btnAddToCart, btnHome, btnViewCart;
     String user_id;
@@ -70,8 +72,11 @@ public class ProductList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
                 cursorGlobal = String.valueOf(position);
-                Toast.makeText(getApplicationContext(), list.get(position).getName(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), list.get(position).getPrice(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), String.valueOf(menuList.get(position).getOrderType()), Toast.LENGTH_SHORT).show();
+                int stock = menuList.get(position).getStock() - 1;
+                menuList.get(position).setStock(stock);
+
+                adapter1.notifyDataSetChanged();
             }
         });
         btnAddToCart.setOnClickListener(new View.OnClickListener() {
@@ -122,15 +127,17 @@ public class ProductList extends Activity {
                     String priceArr = respObj.getString("priceArr");
                     String picNameArr = respObj.getString("picNameArr");
                     String stockArr = respObj.getString("stockArr");
+                    String orderTypeArr = respObj.getString("orderTypeArr");
                     //converting to array
                     String[] dishesArr2 = dishesArr.split(",");
                     String[] priceArr2 = priceArr.split(",");
                     String[] picNameArr2 = picNameArr.split(",");
                     String[] stockArr2 = stockArr.split(",");
+                    String[] orderTypeArr2 = orderTypeArr.split(",");
                     for(int i=0; i<dishesArr2.length; i++){
                         String picName = picNameArr2[i];
                         String picUrl = GlobalVariables.url+"/dishesPic/"+picName;
-                        list.add(new Product(i , dishesArr2[i], "₱"+priceArr2[i],stockArr2[i], picUrl));
+                        menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
                     }
                     adapter1.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -164,7 +171,7 @@ public class ProductList extends Activity {
         btnHome = (Button) findViewById(R.id.btnHome);
         btnViewCart = (Button) findViewById(R.id.btnViewCart);
         gridView = (GridView) findViewById(R.id.gridView);
-        adapter1 = new productAdapter(this, R.layout.product_items, list);
+        adapter1 = new productAdapter(this, R.layout.product_items, menuList);
         gridView.setAdapter(adapter1);
     }
 }
