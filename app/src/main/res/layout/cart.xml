@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="6">
+    android:weightSum="6"
+    android:background="@android:color/holo_purple"
+    >
 
     <LinearLayout
         android:layout_height="0dp"
@@ -48,7 +50,8 @@
         android:id="@+id/gridView"
         android:layout_gravity="center"
         android:numColumns="1"
-        android:background="@android:color/holo_purple">
+        android:background="@android:color/white"
+       >
         >
     </GridView>
 

@@ -71,6 +71,10 @@ public class ProductList extends Activity {
                 Float price = menuList.get(position).getPrice();
                 int orderType = menuList.get(position).getOrderType();
                 int stock = menuList.get(position).getStock()-1;
+                if (stock < 0){
+                    Toast.makeText(ProductList.this, "Out Of Stock", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //check cart is empty
                 if (!GlobalVariables.cartList.isEmpty()){
                     //for each order
@@ -142,11 +146,20 @@ public class ProductList extends Activity {
                     String[] picNameArr2 = picNameArr.split(",");
                     String[] stockArr2 = stockArr.split(",");
                     String[] orderTypeArr2 = orderTypeArr.split(",");
+//                  //proccess
                     for(int i=0; i<dishesArr2.length; i++){
+                        if (!GlobalVariables.cartList.isEmpty()){
+                            for (int j=0; j<GlobalVariables.cartList.size(); j++){
+                                if (dishesArr2[i].equals(GlobalVariables.cartList.get(j).getOrder())){
+                                    stockArr2[i] = String.valueOf(Integer.parseInt(stockArr2[i]) - GlobalVariables.cartList.get(j).getQuantity());
+                                }
+                            }
+                        }
                         String picName = picNameArr2[i];
                         String picUrl = GlobalVariables.url+"/dishesPic/"+picName;
                         menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
                     }
+
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();

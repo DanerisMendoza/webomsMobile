@@ -72,7 +72,11 @@ public class productAdapter extends BaseAdapter {
         Product product = productList.get(position);
         holder.nameText.setText(product.getName());
         holder.priceText.setText("Price: ₱"+product.getPrice());
-        holder.stockText.setText("Stock: "+product.getStock());
+        if (product.getStock() <= 0){
+            holder.stockText.setText("Out of Stock");
+        }else {
+            holder.stockText.setText("Stock: " + product.getStock());
+        }
         Glide.with(context.getApplicationContext()).load(product.getImage()).into(holder.imageView);
         return row;
     }
