@@ -7,15 +7,30 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CartPage extends Activity {
 
-    String user_id;
-    Button buttonViewMenu;
+    Button buttonViewMenu, btnClear, btnCheckout;
     Intent Callthis;
-    GridView gridView2;
+    GridView gridView;
     CartAdapter adapter = null;
+    TextView textViewTotal,textViewBalance;
+    float total = 0, balance = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -27,25 +42,87 @@ public class CartPage extends Activity {
             public void onClick(View v) {
                 finish();
                 Callthis = new Intent(".ProductList");
-                Callthis.putExtra("user_id", user_id);
                 startActivity(Callthis);
             }
         });
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalVariables.cartList.clear();
+                adapter.notifyDataSetChanged();
+                total = 0;
+                textViewTotal.setText("Total: ₱"+total);;
+            }
+        });
 
+        btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (balance < total){
+                    Toast.makeText(CartPage.this, "Your Balance is insufficient", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(CartPage.this, "Order Success", Toast.LENGTH_SHORT).show();
+                }
+//                GlobalVariables.cartList.clear();
+            }
+        });
     }
 
     public void init(){
-        user_id = getIntent().getStringExtra("user_id");
+        textViewBalance = (TextView) findViewById(R.id.textViewBalance);
+        GlobalClass globalClass = (GlobalClass) getApplicationContext();
+        String user_id = globalClass.getUser_id();
+        postDataUsingVolley(user_id);
+        textViewTotal = (TextView) findViewById(R.id.textViewTotal);
         buttonViewMenu = (Button) findViewById(R.id.buttonViewMenu);
-        gridView2 = (GridView) findViewById(R.id.gridView2);
+        btnClear = (Button) findViewById(R.id.btnClear);
+        btnCheckout = (Button) findViewById(R.id.btnCheckout);
+        gridView = (GridView) findViewById(R.id.gridView);
         adapter = new CartAdapter(this, R.layout.cart_items, GlobalVariables.cartList);
-        gridView2.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,GlobalVariables.cartList);
-//        Toast.makeText(this, GlobalVariables.cartList.get(0).getOrder()+"\n"
-//                +GlobalVariables.cartList.get(0).getPrice()+"\n"
-//                , Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, user_id, Toast.LENGTH_SHORT).show();
-
+        gridView.setAdapter(adapter);
+        computeTotal();
     }
+
+    void computeTotal(){
+        for (int i = 0; i<GlobalVariables.cartList.size(); i++){
+            int quantity = GlobalVariables.cartList.get(i).getQuantity();
+            Float price = GlobalVariables.cartList.get(i).getPrice() * quantity;
+            total += price;
+        }
+        textViewTotal.setText("Total: ₱"+total);
+    }
+
+    private void postDataUsingVolley(final String user_id) {
+        String url = GlobalVariables.url+"/mobile/getUserInfo.php";
+        RequestQueue queue = Volley.newRequestQueue(CartPage.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject respObj = new JSONObject(response);
+                    balance = Float.parseFloat(respObj.getString("balance"));
+                    textViewBalance.setText( "Balance: ₱"+respObj.getString("balance"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("post", "webomsMobile");
+                params.put("user_id", user_id);
+                return params;
+            }
+        };
+        queue.add(request);
+    }
+
 }

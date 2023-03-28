@@ -8,4 +8,5 @@ public interface GlobalVariables {
     //localHost
     public static final  String url = "http://192.168.1.4/Web-based-ordering-management-system";
     public ArrayList<Cart> cartList = new ArrayList<Cart>();
+
 }

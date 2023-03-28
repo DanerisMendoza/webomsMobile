@@ -53,8 +53,7 @@ public class ProductList extends Activity {
     ArrayList<Product> menuList = new ArrayList<Product>();
 
     String cursorGlobal = "";
-    Button btnAddToCart, btnHome, btnViewCart;
-    String user_id;
+    Button btnHome, btnViewCart;
     Intent Callthis;
 
 
@@ -72,27 +71,38 @@ public class ProductList extends Activity {
                 Float price = menuList.get(position).getPrice();
                 int orderType = menuList.get(position).getOrderType();
                 int stock = menuList.get(position).getStock()-1;
-                GlobalVariables.cartList.add(new Cart(order,1,price,orderType));
-
+                //check cart is empty
+                if (!GlobalVariables.cartList.isEmpty()){
+                    //for each order
+                    boolean containOrder = false;
+                    for (int i = 0; i < GlobalVariables.cartList.size(); i++) {
+                        if (GlobalVariables.cartList.get(i).getOrder().equals(order)) {
+                            int quantity = GlobalVariables.cartList.get(i).getQuantity() + 1;
+                            GlobalVariables.cartList.get(i).setQuantity(quantity);
+                            GlobalVariables.cartList.get(i).setPrice(price*quantity);
+                            containOrder = true;
+                        }
+                    }
+                    if (containOrder == false){
+                        GlobalVariables.cartList.add(new Cart(order, 1, price, orderType));
+                    }
+                }
+                //if empty then add order directly in the list
+                else {
+                    GlobalVariables.cartList.add(new Cart(order, 1, price, orderType));
+                }
+                Toast.makeText(ProductList.this, "Add to cart Success!", Toast.LENGTH_SHORT).show();
+                //decrease stock
                 menuList.get(position).setStock(stock);
                 adapter.notifyDataSetChanged();
             }
         });
-        btnAddToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if(cursorGlobal.contentEquals("")) {
-                    Toast.makeText(getApplicationContext(), "Select a product!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-        });
+
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 finish();
                 Callthis = new Intent(".Dashboard");
-                Callthis.putExtra("user_id", user_id);
                 startActivity(Callthis);
             }
         });
@@ -102,7 +112,6 @@ public class ProductList extends Activity {
             public void onClick(View arg0) {
                 finish();
                 Callthis = new Intent(".CartPage");
-                Callthis.putExtra("user_id", user_id);
                 startActivity(Callthis);
             }
         });
@@ -153,20 +162,13 @@ public class ProductList extends Activity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("post", "webomsMobile");
-                params.put("user_id", user_id);
                 return params;
             }
         };
         queue.add(request);
     }
 
-
-
-
-
     public void init() {
-        user_id = getIntent().getStringExtra("user_id");
-        btnAddToCart = (Button) findViewById(R.id.btnAddToCart);
         btnHome = (Button) findViewById(R.id.btnHome);
         btnViewCart = (Button) findViewById(R.id.btnViewCart);
         gridView = (GridView) findViewById(R.id.gridView);

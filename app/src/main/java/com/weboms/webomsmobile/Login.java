@@ -60,8 +60,8 @@ public class Login extends AppCompatActivity {
                     if (result.equals("valid")){
                         finish();
                         Callthis = new Intent(".Dashboard");
-                        String user_id = respObj.getString("user_id");
-                        Callthis.putExtra("user_id", user_id);
+                        GlobalClass globalClass = (GlobalClass) getApplicationContext();
+                        globalClass.setUser_id(respObj.getString("user_id"));
                         startActivity(Callthis);
                     }
                 } catch (JSONException e) {

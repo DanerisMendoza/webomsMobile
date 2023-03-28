@@ -21,7 +21,7 @@
         android:layout_width="fill_parent"
         android:orientation="horizontal"
         android:padding="1dp"
-        android:weightSum="3"
+        android:weightSum="2"
         android:layout_weight="1">
         <Button
             android:layout_weight="1"
@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Home\n"
+            android:text="Home"
             android:textSize="18sp" />
 
             <Button
@@ -41,16 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="View Cart"
-            android:textSize="18sp" />
-
-            <Button
-            android:layout_weight="1"
-            android:id="@+id/btnAddToCart"
-            style="android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="add to cart"
             android:textSize="18sp" />
 
     </LinearLayout>

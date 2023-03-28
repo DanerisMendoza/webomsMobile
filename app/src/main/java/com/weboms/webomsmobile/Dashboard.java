@@ -48,7 +48,6 @@ public class Dashboard extends Activity {
             public void onClick(View v) {
                 finish();
                 Callthis = new Intent(".ProductList");
-                Callthis.putExtra("user_id", user_id);
                 startActivity(Callthis);
             }
         });
@@ -56,7 +55,8 @@ public class Dashboard extends Activity {
     }
 
     public void init(){
-        user_id = getIntent().getStringExtra("user_id");
+        GlobalClass globalClass = (GlobalClass) getApplicationContext();
+        user_id = globalClass.getUser_id();
         postDataUsingVolley(user_id);
         imgView = findViewById(R.id.imgView);
         textViewName = findViewById(R.id.textViewName);
