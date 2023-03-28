@@ -31,6 +31,7 @@ public class CartPage extends Activity {
     CartAdapter adapter = null;
     TextView textViewTotal,textViewBalance;
     float total = 0, balance = 0;
+    String user_id;
 
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -62,9 +63,38 @@ public class CartPage extends Activity {
                     Toast.makeText(CartPage.this, "Your Balance is insufficient", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    String orderType = "",dishesQuantity = "", dishesArr = "", priceArr = "",totalString="";
+                    for (int i=0; i<GlobalVariables.cartList.size(); i++){
+                        if (i == GlobalVariables.cartList.size()-1){
+                            orderType += GlobalVariables.cartList.get(i).getOrderType();
+                            dishesQuantity += GlobalVariables.cartList.get(i).getQuantity();
+                            dishesArr += GlobalVariables.cartList.get(i).getOrder();
+                            priceArr += GlobalVariables.cartList.get(i).getPrice();
+                        }
+                        else {
+                            orderType += GlobalVariables.cartList.get(i).getOrderType() + ",";
+                            dishesQuantity += GlobalVariables.cartList.get(i).getQuantity() + ",";
+                            dishesArr += GlobalVariables.cartList.get(i).getOrder() + ",";
+                            priceArr += GlobalVariables.cartList.get(i).getPrice() + ",";
+                        }
+                    }
+                    totalString = String.valueOf(total);
+//                    Toast.makeText(CartPage.this, "user_id: "+user_id, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartPage.this, "orderType: "+orderType, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartPage.this, "dishesQuantity: "+dishesQuantity, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartPage.this, "dishesArr: "+dishesArr, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartPage.this, "priceArr: "+priceArr, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartPage.this, "total: "+totalString, Toast.LENGTH_SHORT).show();
+
+                    insertOrder(user_id,orderType,dishesQuantity,dishesArr,priceArr,totalString);
+                    GlobalVariables.cartList.clear();
+                    adapter.notifyDataSetChanged();
+                    balance = balance-total;
+                    textViewBalance.setText("Balance: ₱"+balance);
+                    total = 0;
+                    textViewTotal.setText("Total: ₱"+total);;
                     Toast.makeText(CartPage.this, "Order Success", Toast.LENGTH_SHORT).show();
                 }
-//                GlobalVariables.cartList.clear();
             }
         });
     }
@@ -72,8 +102,8 @@ public class CartPage extends Activity {
     public void init(){
         textViewBalance = (TextView) findViewById(R.id.textViewBalance);
         GlobalClass globalClass = (GlobalClass) getApplicationContext();
-        String user_id = globalClass.getUser_id();
-        postDataUsingVolley(user_id);
+        user_id = globalClass.getUser_id();
+        getBalance(user_id);
         textViewTotal = (TextView) findViewById(R.id.textViewTotal);
         buttonViewMenu = (Button) findViewById(R.id.buttonViewMenu);
         btnClear = (Button) findViewById(R.id.btnClear);
@@ -93,7 +123,7 @@ public class CartPage extends Activity {
         textViewTotal.setText("Total: ₱"+total);
     }
 
-    private void postDataUsingVolley(final String user_id) {
+    private void getBalance(final String user_id) {
         String url = GlobalVariables.url+"/mobile/getUserInfo.php";
         RequestQueue queue = Volley.newRequestQueue(CartPage.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -125,4 +155,38 @@ public class CartPage extends Activity {
         queue.add(request);
     }
 
+    private void insertOrder(final String user_id, final String orderType, final String dishesQuantity, final String dishesArr, final String priceArr, final String total) {
+        String url = GlobalVariables.url+"/mobile/insertOrder.php";
+        RequestQueue queue2 = Volley.newRequestQueue(CartPage.this);
+        StringRequest request2 = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject respObj = new JSONObject(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("post", "webomsMobile");
+                params.put("user_id", user_id);
+                params.put("orderType", orderType);
+                params.put("dishesQuantity", dishesQuantity);
+                params.put("dishesArr", dishesArr);
+                params.put("priceArr", priceArr);
+                params.put("total", total);
+                return params;
+            }
+        };
+        queue2.add(request2);
+    }
 }
