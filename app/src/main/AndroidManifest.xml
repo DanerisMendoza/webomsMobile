@@ -55,10 +55,10 @@
 
         <!--Cart-->
         <activity
-            android:name=".Cart"
+            android:name=".CartPage"
             android:exported="true">
             <intent-filter>
-                <action android:name=".Cart" />
+                <action android:name=".CartPage" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

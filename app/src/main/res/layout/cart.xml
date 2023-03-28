@@ -45,10 +45,11 @@
         android:layout_weight="4"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:id="@+id/gridView"
+        android:id="@+id/gridView2"
         android:layout_gravity="center"
         android:numColumns="1"
         android:background="@android:color/holo_purple">
+        >
     </GridView>
 
     <LinearLayout

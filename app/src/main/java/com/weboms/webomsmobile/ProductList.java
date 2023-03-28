@@ -47,13 +47,10 @@ import java.util.concurrent.ExecutionException;
 
 
 public class ProductList extends Activity {
-    productAdapter adapter1 = null;
+    productAdapter adapter = null;
 
-    GridView gridView,gridViewOrderList;
+    GridView gridView;
     ArrayList<Product> menuList = new ArrayList<Product>();
-
-
-    List<Map<String,String>> orderList = new ArrayList<Map<String,String>>();
 
     String cursorGlobal = "";
     Button btnAddToCart, btnHome, btnViewCart;
@@ -71,12 +68,14 @@ public class ProductList extends Activity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                cursorGlobal = String.valueOf(position);
-                Toast.makeText(getApplicationContext(), String.valueOf(menuList.get(position).getOrderType()), Toast.LENGTH_SHORT).show();
-                int stock = menuList.get(position).getStock() - 1;
-                menuList.get(position).setStock(stock);
+                String order = menuList.get(position).getName();
+                Float price = menuList.get(position).getPrice();
+                int orderType = menuList.get(position).getOrderType();
+                int stock = menuList.get(position).getStock()-1;
+                GlobalVariables.cartList.add(new Cart(order,1,price,orderType));
 
-                adapter1.notifyDataSetChanged();
+                menuList.get(position).setStock(stock);
+                adapter.notifyDataSetChanged();
             }
         });
         btnAddToCart.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +101,7 @@ public class ProductList extends Activity {
             @Override
             public void onClick(View arg0) {
                 finish();
-                Callthis = new Intent(".Cart");
+                Callthis = new Intent(".CartPage");
                 Callthis.putExtra("user_id", user_id);
                 startActivity(Callthis);
             }
@@ -139,7 +138,7 @@ public class ProductList extends Activity {
                         String picUrl = GlobalVariables.url+"/dishesPic/"+picName;
                         menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
                     }
-                    adapter1.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -171,7 +170,7 @@ public class ProductList extends Activity {
         btnHome = (Button) findViewById(R.id.btnHome);
         btnViewCart = (Button) findViewById(R.id.btnViewCart);
         gridView = (GridView) findViewById(R.id.gridView);
-        adapter1 = new productAdapter(this, R.layout.product_items, menuList);
-        gridView.setAdapter(adapter1);
+        adapter = new productAdapter(this, R.layout.product_items, menuList);
+        gridView.setAdapter(adapter);
     }
 }

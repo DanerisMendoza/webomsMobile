@@ -1,38 +1,49 @@
 package com.weboms.webomsmobile;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.Toast;
+public class Cart {
 
-public class Cart extends Activity {
+    private String order;
+    private int quantity;
+    private float price;
+    private int orderType;
 
-    String user_id;
-    Button buttonViewMenu;
-    Intent Callthis;
-
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.cart);
-        init();
-        buttonViewMenu.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                finish();
-                Callthis = new Intent(".ProductList");
-                Callthis.putExtra("user_id", user_id);
-                startActivity(Callthis);
-            }
-        });
-
+    public Cart(String order, int quantity, float price, int orderType){
+        super();
+        this.order = order;
+        this.quantity = quantity;
+        this.price = price;
+        this.orderType = orderType;
     }
 
-    public void init(){
-        user_id = getIntent().getStringExtra("user_id");
-        buttonViewMenu = (Button) findViewById(R.id.buttonViewMenu);
+    public String getOrder() {
+        return order;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public int getOrderType() {
+        return orderType;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public void setOrderType(int orderType) {
+        this.orderType = orderType;
     }
 }
