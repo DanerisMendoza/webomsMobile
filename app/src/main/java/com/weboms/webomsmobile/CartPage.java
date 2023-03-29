@@ -87,6 +87,7 @@ public class CartPage extends Activity {
 //                    Toast.makeText(CartPage.this, "total: "+totalString, Toast.LENGTH_SHORT).show();
 
                     insertOrder(user_id,orderType,dishesQuantity,dishesArr,priceArr,totalString);
+                    sendReceipt(user_id,orderType,dishesQuantity,dishesArr,priceArr,totalString);
                     GlobalVariables.cartList.clear();
                     adapter.notifyDataSetChanged();
                     balance = balance-total;
@@ -117,7 +118,7 @@ public class CartPage extends Activity {
     void computeTotal(){
         for (int i = 0; i<GlobalVariables.cartList.size(); i++){
             int quantity = GlobalVariables.cartList.get(i).getQuantity();
-            Float price = GlobalVariables.cartList.get(i).getPrice() * quantity;
+            Float price = GlobalVariables.cartList.get(i).getPrice();
             total += price;
         }
         textViewTotal.setText("Total: ₱"+total);
@@ -157,8 +158,8 @@ public class CartPage extends Activity {
 
     private void insertOrder(final String user_id, final String orderType, final String dishesQuantity, final String dishesArr, final String priceArr, final String total) {
         String url = GlobalVariables.url+"/mobile/insertOrder.php";
-        RequestQueue queue2 = Volley.newRequestQueue(CartPage.this);
-        StringRequest request2 = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+        RequestQueue queue = Volley.newRequestQueue(CartPage.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -187,6 +188,42 @@ public class CartPage extends Activity {
                 return params;
             }
         };
-        queue2.add(request2);
+        queue.add(request);
     }
+
+    private void sendReceipt(final String user_id, final String orderType, final String dishesQuantity, final String dishesArr, final String priceArr, final String total) {
+        String url = GlobalVariables.url+"/mobile/sendReceipt.php";
+        RequestQueue queue = Volley.newRequestQueue(CartPage.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject respObj = new JSONObject(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("post", "webomsMobile");
+                params.put("user_id", user_id);
+                params.put("orderType", orderType);
+                params.put("dishesQuantity", dishesQuantity);
+                params.put("dishesArr", dishesArr);
+                params.put("priceArr", priceArr);
+                params.put("total", total);
+                return params;
+            }
+        };
+        queue.add(request);
+    }
+    
 }
