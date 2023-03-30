@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -87,7 +88,6 @@ public class CartPage extends Activity {
 //                    Toast.makeText(CartPage.this, "total: "+totalString, Toast.LENGTH_SHORT).show();
 
                     insertOrder(user_id,orderType,dishesQuantity,dishesArr,priceArr,totalString);
-                    sendReceipt(user_id,orderType,dishesQuantity,dishesArr,priceArr,totalString);
                     GlobalVariables.cartList.clear();
                     adapter.notifyDataSetChanged();
                     balance = balance-total;
@@ -188,42 +188,8 @@ public class CartPage extends Activity {
                 return params;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(request);
     }
 
-    private void sendReceipt(final String user_id, final String orderType, final String dishesQuantity, final String dishesArr, final String priceArr, final String total) {
-        String url = GlobalVariables.url+"/mobile/sendReceipt.php";
-        RequestQueue queue = Volley.newRequestQueue(CartPage.this);
-        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject respObj = new JSONObject(response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("post", "webomsMobile");
-                params.put("user_id", user_id);
-                params.put("orderType", orderType);
-                params.put("dishesQuantity", dishesQuantity);
-                params.put("dishesArr", dishesArr);
-                params.put("priceArr", priceArr);
-                params.put("total", total);
-                return params;
-            }
-        };
-        queue.add(request);
-    }
-    
 }
