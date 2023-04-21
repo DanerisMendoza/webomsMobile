@@ -22,7 +22,7 @@ public class SplashScreen extends Activity {
         Thread timer = new Thread() {
             public void run() {
                 try {
-                    sleep(1000);
+                    sleep(4000);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

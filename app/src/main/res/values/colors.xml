@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="orange_ochre">#DD7D38</color>
+    <color name="coast">#366C80</color>
+    <color name="charcoal">#0D0D0D</color>
+    <color name="charcoal1">#595858</color>
+    <color name="beige">#9c8e83</color>
+
+
 </resources>
