@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -33,12 +34,34 @@ public class CartPage extends Activity {
     TextView textViewTotal,textViewBalance;
     float total = 0, balance = 0;
     String user_id;
+    View currentlyClicked = null;
 
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         init();
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
+                String order = GlobalVariables.cartList.get(position).getOrder();
+                int quantity = GlobalVariables.cartList.get(position).getQuantity();
+                
+
+                // Iterate through all child views in the GridView
+                for (int i = 0; i < arg0.getChildCount(); i++) {
+                    View child = arg0.getChildAt(i);
+                    if (i == position) {
+                        // Set the background color of the clicked view to purple
+                        child.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                    } else {
+                        // Set the background color of all other views to white
+                        child.setBackgroundColor(getResources().getColor(R.color.white));
+                    }
+                }
+            }
+        });
+
         buttonViewMenu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
