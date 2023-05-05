@@ -61,7 +61,7 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:weightSum="2"
-        android:layout_weight=".5">
+        android:layout_weight=".4">
 
         <TextView
             android:layout_weight="1"
@@ -79,6 +79,36 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Total:"
+            android:textSize="18sp" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="2"
+        android:layout_weight=".5">
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/ButtonDecrease"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="-"
+            android:textSize="18sp" />
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/ButtonIncrease"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="+"
             android:textSize="18sp" />
 
 

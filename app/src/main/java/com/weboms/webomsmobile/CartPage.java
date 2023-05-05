@@ -27,14 +27,14 @@ import java.util.Map;
 
 public class CartPage extends Activity {
 
-    Button buttonViewMenu, btnClear, btnCheckout;
+    Button buttonViewMenu, btnClear, btnCheckout, ButtonDecrease, ButtonIncrease;
     Intent Callthis;
     GridView gridView;
     CartAdapter adapter = null;
     TextView textViewTotal,textViewBalance;
     float total = 0, balance = 0;
     String user_id;
-    View currentlyClicked = null;
+    int currentlyClickedPosition = -1;
 
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -46,7 +46,7 @@ public class CartPage extends Activity {
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
                 String order = GlobalVariables.cartList.get(position).getOrder();
                 int quantity = GlobalVariables.cartList.get(position).getQuantity();
-                
+                currentlyClickedPosition = position;
 
                 // Iterate through all child views in the GridView
                 for (int i = 0; i < arg0.getChildCount(); i++) {
@@ -59,6 +59,38 @@ public class CartPage extends Activity {
                         child.setBackgroundColor(getResources().getColor(R.color.white));
                     }
                 }
+            }
+        });
+
+        ButtonDecrease.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(currentlyClickedPosition == -1){
+                    Toast.makeText(CartPage.this, "Please Choose Order to Decrease", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
+                int result = currentQty - 1;
+                GlobalVariables.cartList.get(currentlyClickedPosition).setQuantity(result);
+                if (result <= 0){
+                    GlobalVariables.cartList.remove(currentlyClickedPosition);
+                }
+                adapter.notifyDataSetChanged();
+                computeTotal();
+            }
+        });
+
+        ButtonIncrease.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(currentlyClickedPosition == -1){
+                    Toast.makeText(CartPage.this, "Please Choose Order to Increase", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
+                String order = GlobalVariables.cartList.get(currentlyClickedPosition).getOrder();
+                checkIfOrderAvailable(order,String.valueOf(currentQty));
             }
         });
 
@@ -103,12 +135,6 @@ public class CartPage extends Activity {
                         }
                     }
                     totalString = String.valueOf(total);
-//                    Toast.makeText(CartPage.this, "user_id: "+user_id, Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(CartPage.this, "orderType: "+orderType, Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(CartPage.this, "dishesQuantity: "+dishesQuantity, Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(CartPage.this, "dishesArr: "+dishesArr, Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(CartPage.this, "priceArr: "+priceArr, Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(CartPage.this, "total: "+totalString, Toast.LENGTH_SHORT).show();
 
                     insertOrder(user_id,orderType,dishesQuantity,dishesArr,priceArr,totalString);
                     GlobalVariables.cartList.clear();
@@ -124,6 +150,8 @@ public class CartPage extends Activity {
     }
 
     public void init(){
+        ButtonDecrease = (Button) findViewById(R.id.ButtonDecrease);
+        ButtonIncrease = (Button) findViewById(R.id.ButtonIncrease);
         textViewBalance = (TextView) findViewById(R.id.textViewBalance);
         GlobalClass globalClass = (GlobalClass) getApplicationContext();
         user_id = globalClass.getUser_id();
@@ -139,12 +167,55 @@ public class CartPage extends Activity {
     }
 
     void computeTotal(){
+        total = 0;
         for (int i = 0; i<GlobalVariables.cartList.size(); i++){
             int quantity = GlobalVariables.cartList.get(i).getQuantity();
-            Float price = GlobalVariables.cartList.get(i).getPrice();
+            Float price = GlobalVariables.cartList.get(i).getPrice()*quantity;
             total += price;
         }
         textViewTotal.setText("Total: ₱"+total);
+    }
+
+    private void checkIfOrderAvailable(final String order, final String qty) {
+        String url = GlobalVariables.url+"/mobile/checkOrderStock.php";
+        RequestQueue queue = Volley.newRequestQueue(CartPage.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject respObj = new JSONObject(response);
+                    String result = respObj.getString("result");
+                    if (result.equals("true")){
+                        int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
+                        int res = currentQty + 1;
+                        GlobalVariables.cartList.get(currentlyClickedPosition).setQuantity(res);
+                        adapter.notifyDataSetChanged();
+                        computeTotal();
+                    }
+                    else{
+                        Toast.makeText(CartPage.this, "Not Enough Stock!", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("order", order);
+                params.put("qty", qty);
+                params.put("post", "webomsMobile");
+                return params;
+            }
+        };
+        queue.add(request);
     }
 
     private void getBalance(final String user_id) {
