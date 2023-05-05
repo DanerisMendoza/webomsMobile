@@ -97,6 +97,9 @@ public class CartPage extends Activity {
                         adapter.notifyDataSetChanged();
                         computeTotal();
                     }
+                    else{
+                        Toast.makeText(CartPage.this, "Not Enough Stock!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
