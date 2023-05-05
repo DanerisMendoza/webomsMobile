@@ -146,6 +146,7 @@ public class ProductList extends Activity {
                     String[] picNameArr2 = picNameArr.split(",");
                     String[] stockArr2 = stockArr.split(",");
                     String[] orderTypeArr2 = orderTypeArr.split(",");
+                    GlobalVariables.menuList.clear();
 //                  //proccess
                     for(int i=0; i<dishesArr2.length; i++){
                         if (!GlobalVariables.cartList.isEmpty()){
