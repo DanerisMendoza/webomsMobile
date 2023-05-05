@@ -125,6 +125,10 @@ public class CartPage extends Activity {
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if( GlobalVariables.cartList.isEmpty()){
+                    Toast.makeText(CartPage.this, "There is nothing in your Cart!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (balance < total){
                     Toast.makeText(CartPage.this, "Your Balance is insufficient", Toast.LENGTH_SHORT).show();
                 }
