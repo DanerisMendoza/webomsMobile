@@ -88,9 +88,16 @@ public class CartPage extends Activity {
                     Toast.makeText(CartPage.this, "Please Choose Order to Increase", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
-                String order = GlobalVariables.cartList.get(currentlyClickedPosition).getOrder();
-                checkIfOrderAvailable(order,String.valueOf(currentQty));
+                else{
+                    int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
+                    int currentStock = GlobalVariables.menuList.get(currentlyClickedPosition).getStock();
+                    if (currentStock > currentQty){
+                        int result = currentQty + 1;
+                        GlobalVariables.cartList.get(currentlyClickedPosition).setQuantity(result);
+                        adapter.notifyDataSetChanged();
+                        computeTotal();
+                    }
+                }
             }
         });
 
@@ -176,47 +183,7 @@ public class CartPage extends Activity {
         textViewTotal.setText("Total: ₱"+total);
     }
 
-    private void checkIfOrderAvailable(final String order, final String qty) {
-        String url = GlobalVariables.url+"/mobile/checkOrderStock.php";
-        RequestQueue queue = Volley.newRequestQueue(CartPage.this);
-        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject respObj = new JSONObject(response);
-                    String result = respObj.getString("result");
-                    if (result.equals("true")){
-                        int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
-                        int res = currentQty + 1;
-                        GlobalVariables.cartList.get(currentlyClickedPosition).setQuantity(res);
-                        adapter.notifyDataSetChanged();
-                        computeTotal();
-                    }
-                    else{
-                        Toast.makeText(CartPage.this, "Not Enough Stock!", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("order", order);
-                params.put("qty", qty);
-                params.put("post", "webomsMobile");
-                return params;
-            }
-        };
-        queue.add(request);
-    }
 
     private void getBalance(final String user_id) {
         String url = GlobalVariables.url+"/mobile/getUserInfo.php";

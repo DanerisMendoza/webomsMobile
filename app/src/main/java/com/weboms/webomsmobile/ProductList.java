@@ -158,6 +158,7 @@ public class ProductList extends Activity {
                         String picName = picNameArr2[i];
                         String picUrl = GlobalVariables.url+"/dishesPic/"+picName;
                         menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
+                        GlobalVariables.menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
                     }
 
                     adapter.notifyDataSetChanged();
