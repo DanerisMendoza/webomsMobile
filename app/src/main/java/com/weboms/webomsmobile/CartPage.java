@@ -91,7 +91,7 @@ public class CartPage extends Activity {
                 else{
                     int currentQty = GlobalVariables.cartList.get(currentlyClickedPosition).getQuantity();
                     int currentStock = GlobalVariables.menuList.get(currentlyClickedPosition).getStock();
-                    if (currentStock > currentQty){
+                    if (currentStock - currentQty >= 1){
                         int result = currentQty + 1;
                         GlobalVariables.cartList.get(currentlyClickedPosition).setQuantity(result);
                         adapter.notifyDataSetChanged();

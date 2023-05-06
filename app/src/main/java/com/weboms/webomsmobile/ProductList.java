@@ -149,6 +149,9 @@ public class ProductList extends Activity {
                     GlobalVariables.menuList.clear();
 //                  //proccess
                     for(int i=0; i<dishesArr2.length; i++){
+                        String picName = picNameArr2[i];
+                        String picUrl = GlobalVariables.url+"/dishesPic/"+picName;
+                        GlobalVariables.menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
                         if (!GlobalVariables.cartList.isEmpty()){
                             for (int j=0; j<GlobalVariables.cartList.size(); j++){
                                 if (dishesArr2[i].equals(GlobalVariables.cartList.get(j).getOrder())){
@@ -156,10 +159,7 @@ public class ProductList extends Activity {
                                 }
                             }
                         }
-                        String picName = picNameArr2[i];
-                        String picUrl = GlobalVariables.url+"/dishesPic/"+picName;
                         menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
-                        GlobalVariables.menuList.add(new Product(i , dishesArr2[i], Float.parseFloat(priceArr2[i]), Integer.parseInt(stockArr2[i]), Integer.parseInt(orderTypeArr2[i]), picUrl));
                     }
 
                     adapter.notifyDataSetChanged();
