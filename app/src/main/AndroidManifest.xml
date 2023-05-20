@@ -64,6 +64,16 @@
             </intent-filter>
         </activity>
 
+        <!--ViewTopup-->
+        <activity
+            android:name=".ViewTopup"
+            android:exported="true">
+            <intent-filter>
+                <action android:name=".ViewTopup" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
