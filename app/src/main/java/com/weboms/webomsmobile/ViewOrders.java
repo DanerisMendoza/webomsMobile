@@ -3,13 +3,19 @@ package com.weboms.webomsmobile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -53,7 +59,7 @@ public class ViewOrders extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                getOrderDetails(order_idList.get(position).substring(1));
+                getOrderDetails(order_idList.get(position).substring(1),totalOrderList.get(position));
             }
         });
     }
@@ -102,7 +108,7 @@ public class ViewOrders extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void getOrderDetails(String order_id) {
+    private void getOrderDetails(String order_id, String total) {
         String url = GlobalVariables.url + "/mobile/getOrderDetails.php";
         RequestQueue queue = Volley.newRequestQueue(ViewOrders.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -121,23 +127,27 @@ public class ViewOrders extends AppCompatActivity {
                     ArrayList<String> dishesQuantityList = jsonArrayToList(dishesQuantity);
 
 
-//                    StringBuffer buffer = new StringBuffer();
-//                    for (int i = 0; i < dishesList.size(); i++) {
-//                        String dish = dishesList.get(i);
-//                        String quantity = dishesQuantityList.get(i);
-//                        String price = priceList.get(i);
-//
-//                        String row = String.format("%-10s %-10s %-10s%n", dish, quantity, price);
-//                        buffer.append(row);
-//                    }
-//
-//                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(new ContextThemeWrapper(ViewOrders.this, R.style.AlertDialogCustom));
-//                    builder.setCancelable(true);
-//                    builder.setTitle("Order Details");
-//                    builder.setMessage(buffer.toString());
-//                    builder.show();
+                    // Inflate the custom layout for the dialog
+                    View dialogView = LayoutInflater.from(ViewOrders.this).inflate(R.layout.dialog_order_details, null);
 
+                    // Find views in the custom layout
+                    TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
+                    TextView totalTextView = dialogView.findViewById(R.id.totalTextView);
+                    RecyclerView orderDetailsRecyclerView = dialogView.findViewById(R.id.orderDetailsRecyclerView);
 
+                    // Set the title for the dialog
+                    titleTextView.setText("Order Details");
+                    totalTextView.setText("Total:"+total);
+
+                    // Create a custom adapter for the RecyclerView
+                    OrderDetailsAdapter adapter = new OrderDetailsAdapter(dishesList, dishesQuantityList, priceList);
+                    orderDetailsRecyclerView.setAdapter(adapter);
+                    orderDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(ViewOrders.this));
+
+                    // Build and show the dialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewOrders.this);
+                    builder.setView(dialogView);
+                    builder.show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
