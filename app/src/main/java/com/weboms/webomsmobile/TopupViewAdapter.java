@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class GridViewAdapter extends BaseAdapter {
+public class TopupViewAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> amountList;
     private ArrayList<String> statusList;
     private ArrayList<String> dateList;
     private ArrayList<String> proofOfPaymentList;
 
-    public GridViewAdapter(Context context, ArrayList<String> amountList, ArrayList<String> statusList,
-                           ArrayList<String> dateList, ArrayList<String> proofOfPaymentList) {
+    public TopupViewAdapter(Context context, ArrayList<String> amountList, ArrayList<String> statusList,
+                            ArrayList<String> dateList, ArrayList<String> proofOfPaymentList) {
         this.context = context;
         this.amountList = amountList;
         this.statusList = statusList;
@@ -44,7 +44,7 @@ public class GridViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item_layout, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.topup_item_layout, parent, false);
             holder = new ViewHolder();
             holder.amountTextView = convertView.findViewById(R.id.amountTextView);
             holder.statusTextView = convertView.findViewById(R.id.statusTextView);

@@ -107,6 +107,13 @@
         />
 
     <Button
+        android:id="@+id/buttonViewOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ViewOrders"
+        />
+
+    <Button
         android:id="@+id/buttonViewTopup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

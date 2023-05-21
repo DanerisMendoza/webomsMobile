@@ -61,7 +61,7 @@ public class ViewTopup extends AppCompatActivity {
                     ArrayList<String> dateList = jsonArrayToList(dateArray);
                     ArrayList<String> proofOfPaymentList = jsonArrayToList(proofOfPaymentArray);
 
-                    GridViewAdapter adapter = new GridViewAdapter(getApplicationContext(), amountList, statusList, dateList, proofOfPaymentList);
+                    TopupViewAdapter adapter = new TopupViewAdapter(getApplicationContext(), amountList, statusList, dateList, proofOfPaymentList);
                     GridView gridView = findViewById(R.id.gridView);
                     // Set the adapter to the GridView
                     gridView.setAdapter(adapter);

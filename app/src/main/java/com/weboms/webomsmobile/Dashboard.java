@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 public class Dashboard extends Activity {
 
-    Button buttonlogout,buttonViewMenu,buttonViewTopup;
+    Button buttonlogout,buttonViewMenu,buttonViewTopup,buttonViewOrders;
     Intent Callthis;
     TextView textViewName, textViewBalance, textViewUserName, textViewGender,  textViewAddress, textViewEmail;
     ImageView imgView;
@@ -61,6 +61,15 @@ public class Dashboard extends Activity {
             }
         });
 
+        buttonViewOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Callthis = new Intent(".ViewOrders");
+                startActivity(Callthis);
+            }
+        });
+
     }
 
     public void init(){
@@ -77,6 +86,7 @@ public class Dashboard extends Activity {
         buttonlogout = findViewById(R.id.buttonlogout);
         buttonViewMenu = findViewById(R.id.buttonViewMenu);
         buttonViewTopup = findViewById(R.id.buttonViewTopup);
+        buttonViewOrders = findViewById(R.id.buttonViewOrders);
     }
 
     private void postDataUsingVolley(final String user_id) {

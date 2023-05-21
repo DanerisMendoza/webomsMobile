@@ -74,6 +74,16 @@
             </intent-filter>
         </activity>
 
+        <!--ViewOrders-->
+        <activity
+            android:name=".ViewOrders"
+            android:exported="true">
+            <intent-filter>
+                <action android:name=".ViewOrders" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
