@@ -1,7 +1,13 @@
 package com.weboms.webomsmobile;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -25,12 +31,27 @@ import java.util.Map;
 
 public class ViewTopup extends AppCompatActivity {
     Button buttonBack;
+    String checksum = "";
+    ArrayList<String> amountList = new ArrayList<>();
+    ArrayList<String> statusList = new ArrayList<>();
+    ArrayList<String> dateList = new ArrayList<>();
+    ArrayList<String> proofOfPaymentList = new ArrayList<>();
+    TopupViewAdapter adapter = null;
+    GridView gridView = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.topup);
         buttonBack = findViewById(R.id.buttonBack);
-        postDataUsingVolley();
+
+        // Set the adapter to the GridView
+        adapter = new TopupViewAdapter(getApplicationContext(), amountList, statusList, dateList, proofOfPaymentList);
+        gridView = findViewById(R.id.gridView);
+        gridView.setAdapter(adapter);
+
+        getTopup();
+        firstChecksum();
+        checkDb();
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +63,7 @@ public class ViewTopup extends AppCompatActivity {
         });
     }
 
-    private void postDataUsingVolley() {
+    private void getTopup() {
         String url = GlobalVariables.url + "/mobile/getTopup.php";
         RequestQueue queue = Volley.newRequestQueue(ViewTopup.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -56,16 +77,13 @@ public class ViewTopup extends AppCompatActivity {
                     JSONArray proofOfPaymentArray = respObj.getJSONArray("proofOfPayment");
 
                     // Convert JSON arrays to ArrayLists
-                    ArrayList<String> amountList = jsonArrayToList(amountArray);
-                    ArrayList<String> statusList = jsonArrayToList(statusArray);
-                    ArrayList<String> dateList = jsonArrayToList(dateArray);
-                    ArrayList<String> proofOfPaymentList = jsonArrayToList(proofOfPaymentArray);
+                    amountList = jsonArrayToList(amountArray);
+                    statusList = jsonArrayToList(statusArray);
+                    dateList = jsonArrayToList(dateArray);
+                    proofOfPaymentList = jsonArrayToList(proofOfPaymentArray);
 
-                    TopupViewAdapter adapter = new TopupViewAdapter(getApplicationContext(), amountList, statusList, dateList, proofOfPaymentList);
-                    GridView gridView = findViewById(R.id.gridView);
-                    // Set the adapter to the GridView
+                    adapter = new TopupViewAdapter(getApplicationContext(), amountList, statusList, dateList, proofOfPaymentList);
                     gridView.setAdapter(adapter);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -82,6 +100,74 @@ public class ViewTopup extends AppCompatActivity {
                 GlobalClass globalClass = (GlobalClass) getApplicationContext();
                 params.put("post", "webomsMobile");
                 params.put("user_id", globalClass.getUser_id());
+                return params;
+            }
+        };
+        queue.add(request);
+    }
+
+    private void checkDb(){
+        new Thread(
+                () -> {
+                    while (true) {
+                        String url = GlobalVariables.url + "/mobile/getTopupChecksum.php";
+                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        @SuppressLint({"ResourceType", "SetTextI18n"}) StringRequest request = new StringRequest(Request.Method.POST, url,
+                                response -> {
+                                    try {
+                                        JSONObject respObj = new JSONObject(response);
+                                        String result =  respObj.getString("result");
+                                        if(!checksum.equals(result)){
+                                            getTopup();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }, error -> Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<>();
+                                params.put("post", "webomsMobile");
+                                return params;
+                            }
+                        };
+                        queue.add(request);
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).start();
+    }
+    private void firstChecksum(){
+        String url = GlobalVariables.url + "/mobile/getTopupChecksum.php";
+        RequestQueue queue = Volley.newRequestQueue(ViewTopup.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject respObj = new JSONObject(response);
+                    String result =  respObj.getString("result");
+                    checksum = result;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                GlobalClass globalClass = (GlobalClass) getApplicationContext();
+                params.put("post", "webomsMobile");
                 return params;
             }
         };
