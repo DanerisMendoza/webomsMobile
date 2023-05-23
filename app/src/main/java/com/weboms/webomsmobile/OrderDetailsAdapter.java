@@ -15,11 +15,13 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
     private List<String> dishesList;
     private List<String> dishesQuantityList;
     private List<String> priceList;
+    private List<String> subTotalList;
 
     public OrderDetailsAdapter(List<String> dishesList, List<String> dishesQuantityList, List<String> priceList) {
         this.dishesList = dishesList;
         this.dishesQuantityList = dishesQuantityList;
         this.priceList = priceList;
+        this.subTotalList = priceList;
     }
 
     @NonNull
@@ -33,11 +35,14 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String dish = dishesList.get(position);
         String quantity = dishesQuantityList.get(position);
-        String price = priceList.get(position);
+        String price = "₱"+priceList.get(position);
+        String subTotal = "₱"+Integer.parseInt(priceList.get(position))*Integer.parseInt(dishesQuantityList.get(position));
+
 
         holder.dishTextView.setText(dish);
         holder.quantityTextView.setText(quantity);
         holder.priceTextView.setText(price);
+        holder.subTotalTextView.setText(subTotal);
     }
 
     @Override
@@ -49,12 +54,14 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
         TextView dishTextView;
         TextView quantityTextView;
         TextView priceTextView;
+        TextView subTotalTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             dishTextView = itemView.findViewById(R.id.dishTextView);
             quantityTextView = itemView.findViewById(R.id.quantityTextView);
             priceTextView = itemView.findViewById(R.id.priceTextView);
+            subTotalTextView = itemView.findViewById(R.id.subTotalTextView);
         }
     }
 }

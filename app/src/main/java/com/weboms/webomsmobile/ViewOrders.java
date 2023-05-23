@@ -39,6 +39,7 @@ public class ViewOrders extends AppCompatActivity {
     ArrayList<String> dateList;
     ArrayList<String> totalOrderList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,7 @@ public class ViewOrders extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                getOrderDetails(order_idList.get(position).substring(1),totalOrderList.get(position));
+                getOrderDetails(order_idList.get(position).substring(1),totalOrderList.get(position),order_idList.get(position));
             }
         });
     }
@@ -108,7 +109,7 @@ public class ViewOrders extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void getOrderDetails(String order_id, String total) {
+    private void getOrderDetails(String order_id, String total, String orderId) {
         String url = GlobalVariables.url + "/mobile/getOrderDetails.php";
         RequestQueue queue = Volley.newRequestQueue(ViewOrders.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -136,8 +137,9 @@ public class ViewOrders extends AppCompatActivity {
                     RecyclerView orderDetailsRecyclerView = dialogView.findViewById(R.id.orderDetailsRecyclerView);
 
                     // Set the title for the dialog
-                    titleTextView.setText("Order Details");
+                    titleTextView.setText("Order Details"+orderId);
                     totalTextView.setText("Total:"+total);
+
 
                     // Create a custom adapter for the RecyclerView
                     OrderDetailsAdapter adapter = new OrderDetailsAdapter(dishesList, dishesQuantityList, priceList);
