@@ -43,11 +43,8 @@ public class ViewTopup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.topup);
         buttonBack = findViewById(R.id.buttonBack);
-
-        // Set the adapter to the GridView
-        adapter = new TopupViewAdapter(getApplicationContext(), amountList, statusList, dateList, proofOfPaymentList);
         gridView = findViewById(R.id.gridView);
-        gridView.setAdapter(adapter);
+
 
         getTopup();
         firstChecksum();
@@ -166,7 +163,6 @@ public class ViewTopup extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                GlobalClass globalClass = (GlobalClass) getApplicationContext();
                 params.put("post", "webomsMobile");
                 return params;
             }

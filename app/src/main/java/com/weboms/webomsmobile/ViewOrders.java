@@ -1,5 +1,6 @@
 package com.weboms.webomsmobile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
@@ -34,11 +35,12 @@ import java.util.Map;
 public class ViewOrders extends AppCompatActivity {
     Button buttonBack;
     GridView gridView;
-    ArrayList<String> order_idList;
-    ArrayList<String> statusList;
-    ArrayList<String> dateList;
-    ArrayList<String> totalOrderList;
-
+    ArrayList<String> order_idList = new ArrayList<>();
+    ArrayList<String> statusList = new ArrayList<>();
+    ArrayList<String> dateList = new ArrayList<>();
+    ArrayList<String> totalOrderList = new ArrayList<>();
+    OrderAdapter adapter = null;
+    String checksum = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,9 @@ public class ViewOrders extends AppCompatActivity {
         setContentView(R.layout.topup);
         buttonBack = findViewById(R.id.buttonBack);
         gridView = findViewById(R.id.gridView);
-        postDataUsingVolley();
+        getOrders();
+        firstChecksum();
+
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +68,7 @@ public class ViewOrders extends AppCompatActivity {
             }
         });
     }
-    private void postDataUsingVolley() {
+    private void getOrders() {
         String url = GlobalVariables.url + "/mobile/getOrder.php";
         RequestQueue queue = Volley.newRequestQueue(ViewOrders.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -84,7 +88,7 @@ public class ViewOrders extends AppCompatActivity {
                     totalOrderList = jsonArrayToList(totalOrderArray);
 
                     // After retrieving data using Volley and converting to ArrayLists
-                    OrderAdapter adapter = new OrderAdapter(getApplicationContext(), order_idList, statusList, dateList, totalOrderList);
+                    adapter = new OrderAdapter(getApplicationContext(), order_idList, statusList, dateList, totalOrderList);
                     gridView.setAdapter(adapter);
 
                 } catch (JSONException e) {
@@ -168,6 +172,75 @@ public class ViewOrders extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("post", "webomsMobile");
                 params.put("order_id", order_id);
+                return params;
+            }
+        };
+        queue.add(request);
+    }
+
+    private void checkDb(){
+        new Thread(
+                () -> {
+                    while (true) {
+                        String url = GlobalVariables.url + "/mobile/getOrderChecksum.php";
+                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        @SuppressLint({"ResourceType", "SetTextI18n"}) StringRequest request = new StringRequest(Request.Method.POST, url,
+                                response -> {
+                                    try {
+                                        JSONObject respObj = new JSONObject(response);
+                                        String result =  respObj.getString("result");
+                                        if(!checksum.equals(result)){
+                                            getOrders();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }, error -> Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<>();
+                                params.put("post", "webomsMobile");
+                                return params;
+                            }
+                        };
+                        queue.add(request);
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).start();
+    }
+
+    private void firstChecksum(){
+        String url = GlobalVariables.url + "/mobile/getOrderChecksum.php";
+        RequestQueue queue = Volley.newRequestQueue(ViewOrders.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject respObj = new JSONObject(response);
+                    String result =  respObj.getString("result");
+                    checksum = result;
+                    checkDb();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("post", "webomsMobile");
                 return params;
             }
         };

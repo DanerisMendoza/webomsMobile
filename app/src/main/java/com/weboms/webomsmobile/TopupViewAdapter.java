@@ -1,6 +1,7 @@
 package com.weboms.webomsmobile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,13 @@ public class TopupViewAdapter extends BaseAdapter {
         // Set the data to the views
         holder.amountTextView.setText(amountList.get(position));
         holder.statusTextView.setText(statusList.get(position));
+        if (statusList.get(position).equals("Approved")) {
+            holder.statusTextView.setTextColor(Color.GREEN);
+        }
+        else{
+            holder.statusTextView.setTextColor(Color.RED);
+        }
+
         holder.dateTextView.setText(dateList.get(position));
         holder.proofOfPaymentTextView.setText(proofOfPaymentList.get(position));
 

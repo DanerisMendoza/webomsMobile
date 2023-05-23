@@ -1,6 +1,7 @@
 package com.weboms.webomsmobile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,14 @@ public class OrderAdapter extends BaseAdapter {
         statusTextView.setText(statuses.get(position));
         dateTextView.setText(dates.get(position));
         totalOrderTextView.setText(totalOrders.get(position));
+
+        if (statuses.get(position).equals("preparing")) {
+            statusTextView.setTextColor(Color.RED);
+        } else if (statuses.get(position).equals("serving")) {
+            statusTextView.setTextColor(Color.BLUE);
+        } else{
+            statusTextView.setTextColor(Color.GREEN);
+        }
 
         return convertView;
     }
