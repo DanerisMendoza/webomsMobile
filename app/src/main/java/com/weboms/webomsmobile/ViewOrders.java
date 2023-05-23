@@ -45,9 +45,10 @@ public class ViewOrders extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.topup);
+        setContentView(R.layout.orders);
         buttonBack = findViewById(R.id.buttonBack);
         gridView = findViewById(R.id.gridView);
+
         getOrders();
         firstChecksum();
 
@@ -164,7 +165,7 @@ public class ViewOrders extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewOrders.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -183,20 +184,21 @@ public class ViewOrders extends AppCompatActivity {
                 () -> {
                     while (true) {
                         String url = GlobalVariables.url + "/mobile/getOrderChecksum.php";
-                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        RequestQueue queue = Volley.newRequestQueue(ViewOrders.this);
                         @SuppressLint({"ResourceType", "SetTextI18n"}) StringRequest request = new StringRequest(Request.Method.POST, url,
                                 response -> {
                                     try {
                                         JSONObject respObj = new JSONObject(response);
                                         String result =  respObj.getString("result");
                                         if(!checksum.equals(result)){
+                                            checksum = result;
                                             getOrders();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
 
-                                }, error -> Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
+                                }, error -> Toast.makeText(ViewOrders.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
                             @Override
                             protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<>();
@@ -234,7 +236,7 @@ public class ViewOrders extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewOrders.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override

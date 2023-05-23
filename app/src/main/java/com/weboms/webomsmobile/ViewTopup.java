@@ -31,13 +31,13 @@ import java.util.Map;
 
 public class ViewTopup extends AppCompatActivity {
     Button buttonBack;
-    String checksum = "";
+    GridView gridView;
     ArrayList<String> amountList = new ArrayList<>();
     ArrayList<String> statusList = new ArrayList<>();
     ArrayList<String> dateList = new ArrayList<>();
     ArrayList<String> proofOfPaymentList = new ArrayList<>();
     TopupViewAdapter adapter = null;
-    GridView gridView = null;
+    String checksum = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +45,8 @@ public class ViewTopup extends AppCompatActivity {
         buttonBack = findViewById(R.id.buttonBack);
         gridView = findViewById(R.id.gridView);
 
-
         getTopup();
         firstChecksum();
-        checkDb();
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +86,7 @@ public class ViewTopup extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewTopup.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -108,20 +106,21 @@ public class ViewTopup extends AppCompatActivity {
                 () -> {
                     while (true) {
                         String url = GlobalVariables.url + "/mobile/getTopupChecksum.php";
-                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        RequestQueue queue = Volley.newRequestQueue(ViewTopup.this);
                         @SuppressLint({"ResourceType", "SetTextI18n"}) StringRequest request = new StringRequest(Request.Method.POST, url,
                                 response -> {
                                     try {
                                         JSONObject respObj = new JSONObject(response);
                                         String result =  respObj.getString("result");
                                         if(!checksum.equals(result)){
+                                            checksum = result;
                                             getTopup();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
 
-                                }, error -> Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
+                                }, error -> Toast.makeText(ViewTopup.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
                             @Override
                             protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<>();
@@ -131,7 +130,7 @@ public class ViewTopup extends AppCompatActivity {
                         };
                         queue.add(request);
                         try {
-                            Thread.sleep(2000);
+                            Thread.sleep(3000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -149,6 +148,7 @@ public class ViewTopup extends AppCompatActivity {
                     JSONObject respObj = new JSONObject(response);
                     String result =  respObj.getString("result");
                     checksum = result;
+                    checkDb();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -157,7 +157,7 @@ public class ViewTopup extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewTopup.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
