@@ -60,7 +60,7 @@ public class ViewOrders extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                getOrderDetails(order_idList.get(position).substring(1),totalOrderList.get(position),order_idList.get(position));
+                getOrderDetails(order_idList.get(position).substring(1),totalOrderList.get(position),order_idList.get(position),dateList.get(position));
             }
         });
     }
@@ -109,7 +109,7 @@ public class ViewOrders extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void getOrderDetails(String order_id, String total, String orderId) {
+    private void getOrderDetails(String order_id, String total, String orderId, String date) {
         String url = GlobalVariables.url + "/mobile/getOrderDetails.php";
         RequestQueue queue = Volley.newRequestQueue(ViewOrders.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -133,12 +133,14 @@ public class ViewOrders extends AppCompatActivity {
 
                     // Find views in the custom layout
                     TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
+                    TextView dateTextView = dialogView.findViewById(R.id.dateTextView);
                     TextView totalTextView = dialogView.findViewById(R.id.totalTextView);
                     RecyclerView orderDetailsRecyclerView = dialogView.findViewById(R.id.orderDetailsRecyclerView);
 
                     // Set the title for the dialog
                     titleTextView.setText("Order Details"+orderId);
-                    totalTextView.setText("Total:"+total);
+                    dateTextView.setText(date);
+                    totalTextView.setText(total);
 
 
                     // Create a custom adapter for the RecyclerView
