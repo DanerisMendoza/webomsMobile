@@ -120,7 +120,7 @@ public class ViewTopup extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
 
-                                }, error -> Toast.makeText(ViewTopup.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show()) {
+                                }, error -> {}) {
                             @Override
                             protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<>();
@@ -128,8 +128,9 @@ public class ViewTopup extends AppCompatActivity {
                                 return params;
                             }
                         };
-                        queue.add(request);
+
                         try {
+                            queue.add(request);
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
