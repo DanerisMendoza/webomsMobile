@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:weightSum="3"
-        android:layout_weight=".5">
+        android:layout_weight=".6">
         <TextView
             android:layout_weight="1"
             android:id="@+id/textViewName"

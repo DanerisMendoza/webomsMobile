@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class Dashboard extends Activity {
                     String picName = respObj.getString("picName");
                     if ((picName != "null")) {
                         String picUrl = GlobalVariables.url+"/profilePic/"+picName;
-                        Glide.with(getApplicationContext()).load(picUrl).into(imgView);
+                        Glide.with(getApplicationContext()).load(picUrl).apply(RequestOptions.circleCropTransform()).into(imgView);
                     }
 
                 } catch (JSONException e) {
