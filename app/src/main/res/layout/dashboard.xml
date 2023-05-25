@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/black_russian"
+    android:orientation="vertical"
+    tools:context=".Dashboard">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,43 +17,105 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-black"
             android:text="Hi, "
-            android:textColor="@color/charcoal1"
+            android:textColor="@color/beige"
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/textViewUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="20dp"
             android:text="Username: "
-            android:textColor="@color/orange_ochre"
+            android:textColor="#829B67"
             android:textSize="35sp" />
 
         <ImageView
             android:id="@+id/imgView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="120dp"
             android:layout_below="@+id/idEt"
             android:scaleType="centerCrop"
             android:src="@drawable/unknown" />
 
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="-60dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="cursive"
+        android:text="Welcomeback!"
+        android:textColor="@color/beige"
+        android:textSize="30sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Name: "
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="30sp"
+            android:textColor="@color/beige"/>
+
+        <TextView
+            android:id="@+id/textViewGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_gravity="center"
+            android:text="Gender: "
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="@color/beige"/>
+
+        <TextView
+            android:id="@+id/textViewAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="30sp"
+            android:text="Address: "
+            android:textColor="@color/beige"/>
+
+        <TextView
+            android:id="@+id/textViewEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="30sp"
+            android:layout_marginBottom="30dp"
+            android:text="Email: "
+            android:textColor="@color/beige"/>
+
+    </LinearLayout>
 
     <TextView
 
-        android:layout_width="244dp"
+        android:layout_width="321dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="-30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
-        android:text="Current Balance:"
-        android:textSize="20sp"
-        android:textColor="@color/charcoal1"/>
+        android:text="Your current balance is:"
+        android:textColor="@color/beige"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textViewBalance"
@@ -60,70 +126,60 @@
         android:layout_marginBottom="30dp"
         android:text="Balance: "
         android:textSize="30sp"
-        android:textColor="@color/coast"/>
+        android:textColor="#829B67"/>
+
+
+    <Button
+        android:id="@+id/buttonViewMenu"
+        android:layout_width="180dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_selector"
+        android:layout_marginBottom="20dp"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         >
 
-        <TextView
-            android:id="@+id/textViewName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Name: " />
 
-        <TextView
-            android:id="@+id/textViewGender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/buttonViewOrders"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:textColor="@color/beige"
             android:layout_gravity="center"
-            android:text="Gender: " />
+            android:layout_marginLeft="100dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/view_orders"
 
-        <TextView
-            android:id="@+id/textViewAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Address: " />
+            />
 
-        <TextView
-            android:id="@+id/textViewEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/buttonViewTopup"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:text="Email: " />
+            android:textColor="@color/beige"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/viewtopup"
+            android:layout_marginBottom="10dp"
+            />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttonViewMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ViewMenu"
-        />
-
-    <Button
-        android:id="@+id/buttonViewOrders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ViewOrders"
-        />
-
-    <Button
-        android:id="@+id/buttonViewTopup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ViewTopup"
-        />
-
-    <Button
         android:id="@+id/buttonlogout"
-        android:layout_width="match_parent"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="#823b3b"
+        android:background="@color/black_russian"
+        android:textSize="17sp"
+        android:drawableRight="@drawable/logout_icon"
+        android:layout_marginTop="50dp"
         android:text="LOGOUT" />
 
 </LinearLayout>

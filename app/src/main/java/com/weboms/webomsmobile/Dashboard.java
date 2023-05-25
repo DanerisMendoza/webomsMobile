@@ -15,6 +15,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
@@ -22,6 +24,7 @@ import org.json.JSONObject;
 
 
 public class Dashboard extends Activity {
+
 
     Button buttonlogout,buttonViewMenu,buttonViewTopup,buttonViewOrders;
     Intent Callthis;
@@ -34,6 +37,7 @@ public class Dashboard extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
         init();
+
 
         buttonlogout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -105,7 +109,7 @@ public class Dashboard extends Activity {
                     textViewEmail.setText( respObj.getString("email"));
                     textViewBalance.setText("₱"+ respObj.getString("balance"));
                     String picName = respObj.getString("picName");
-                    if ((picName != null)) {
+                    if ((picName != "null")) {
                         String picUrl = GlobalVariables.url+"/profilePic/"+picName;
                         Glide.with(getApplicationContext()).load(picUrl).into(imgView);
                     }

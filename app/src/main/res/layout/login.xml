@@ -6,29 +6,84 @@
     android:layout_height="match_parent"
     tools:context=".Login"
     android:padding="0.2in"
+    android:layout_gravity="center|center_horizontal|center_vertical"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@drawable/login_bg">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="210dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_rec">
+
+        <EditText
+            android:id="@+id/editTextUsername"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="230dp"
+            android:layout_marginBottom="20dp"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:hint="Username"
+            android:textColor="@color/charcoal1"
+            android:textColorHint="@color/charcoal1"
+            android:drawableLeft="@drawable/user_icon"
+            android:background="@drawable/input_bg"/>
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="280dp"
+            android:layout_marginBottom="20dp"
+            android:paddingLeft="10dp"
+            android:drawablePadding="10dp"
+            android:hint="Password"
+            android:password="true"
+            android:textColor="@color/charcoal1"
+            android:textColorHint="@color/charcoal1"
+            android:drawableLeft="@drawable/pass_icon"
+            android:background="@drawable/input_bg" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="330dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#829B67"
+            android:text="LOGIN"
+            android:textColor="#f0e3d5"
+            android:textColorHint="#f0e3d5" />
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="200dp"
-
-        app:srcCompat="@drawable/croppedlogo" />
+        android:layout_marginTop="-450dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/weboms_logodark" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-50dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="-50dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Get your food just right away."
         android:textColor="@color/charcoal1"
-        android:textSize="17sp"/>
+        android:textSize="17sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginLeft="130dp"
         android:orientation="horizontal"
         android:textAlignment="textEnd">
@@ -38,12 +93,13 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:text="Sign up"
-            android:textColor="@color/orange_ochre"
+            android:textColor="#829B67"
             android:textSize="17sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:fontFamily="sans-serif-condensed-medium"
             android:text=" now to order."
             android:textColor="@color/charcoal1"
@@ -51,40 +107,12 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Username"
-        android:textColor="#9c8e83"
-        android:textColorHint="#9c8e83" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:password="true"
-        android:textColor="#9c8e83"
-        android:textColorHint="#9c8e83" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/coast"
-        android:text="LOGIN"
-        android:textColor="#DD7D38"
-        android:textColorHint="#DD7D38" />
-
-
     <!--progress bar for loading -->
+
     <ProgressBar
         android:id="@+id/idLoadingPB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone" />
-
 </LinearLayout>

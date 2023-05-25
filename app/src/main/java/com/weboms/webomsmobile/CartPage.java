@@ -41,6 +41,7 @@ public class CartPage extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         init();
+        Toast.makeText(this, "1\n 2 \n 3", Toast.LENGTH_SHORT).show();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
@@ -53,7 +54,7 @@ public class CartPage extends Activity {
                     View child = arg0.getChildAt(i);
                     if (i == position) {
                         // Set the background color of the clicked view to purple
-                        child.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                        child.setBackgroundColor(getResources().getColor(R.color.green));
                     } else {
                         // Set the background color of all other views to white
                         child.setBackgroundColor(getResources().getColor(R.color.white));
